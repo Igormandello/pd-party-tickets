@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'screens/HomePage.dart';
 
 class App extends StatelessWidget {
   App({ Key key, this.title }) : super(key: key);
@@ -21,8 +22,8 @@ class App extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            Icon(Icons.photo_camera),
-            Icon(Icons.format_list_bulleted),
+            HomePage(),
+            HomePage(),
           ],
         ),
       ),
