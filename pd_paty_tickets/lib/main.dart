@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'HomePage.dart';
+import 'app.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(PDPartyTickets());
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class PDPartyTickets extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -12,7 +11,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      home: MyHomePage(title: 'PD Party Tickets'),
+      home: App(title: 'PD Party Tickets'),
     );
   }
 }
