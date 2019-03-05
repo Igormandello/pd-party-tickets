@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:barcode_scan/barcode_scan.dart';
+import 'package:qrcode_reader/qrcode_reader.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({ Key key }) : super(key: key);
@@ -18,7 +18,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future _scan() async {
-    String str = await BarcodeScanner.scan();
+    String str = await new QRCodeReader()
+                   .setAutoFocusIntervalInMs(200) // default 5000
+                   .setForceAutoFocus(true) // default false
+                   .setTorchEnabled(true) // default false
+                   .setHandlePermissions(true) // default true
+                   .setExecuteAfterPermissionGranted(true) // default true
+                   .scan();
     print(str);
     this._addPerson();
   }

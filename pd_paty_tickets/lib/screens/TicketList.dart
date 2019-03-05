@@ -7,12 +7,9 @@ class TicketList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.separated(
-        itemBuilder: (context, index) => Padding(
-          padding: EdgeInsets.all(0),
-          child: ListTile(
-            leading: Icon(Icons.person),
-            title: Text("Index ${items[index]}"),
-          ),
+        itemBuilder: (context, index) => ListTile(
+          leading: Icon(Icons.person),
+          title: Text("Index ${items[index]}")
         ),
         separatorBuilder: (context, index) => Divider(
           color: Colors.black26,
