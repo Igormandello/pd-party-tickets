@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screens/HomePage.dart';
-import 'screens/TicketList.dart';
+import 'screens/home_page.dart';
+import 'screens/ticket_list.dart';
 
 class App extends StatelessWidget {
   App({ Key key, this.title }) : super(key: key);
