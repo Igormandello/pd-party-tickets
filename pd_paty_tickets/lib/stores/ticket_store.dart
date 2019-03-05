@@ -9,8 +9,10 @@ class Ticket {
 class TicketStore extends Store {
   TicketStore() {
     triggerOnAction(addTicket, (Ticket ticket) {
-      this._tickets.add(ticket);
-      this._tickets.sort((a, b) => a.id.compareTo(b.id));
+      if (!this._tickets.any((ticket) => ticket.id == ticket.id)) {
+        this._tickets.add(ticket);
+        this._tickets.sort((a, b) => a.id.compareTo(b.id));
+      }
     });
   }
 

@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../stores/ticket_store.dart';
 
 class TicketList extends StatefulWidget {
-
+  TicketList({ Key key }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => new TicketListState();

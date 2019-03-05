@@ -1,32 +1,102 @@
+import 'dart:async';
+
+import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:qrcode_reader/qrcode_reader.dart';
+import 'package:flutter_flux/flutter_flux.dart';
+import '../stores/ticket_store.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({ Key key }) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  int _peopleCounter = 0;
+class _HomePageState extends State<HomePage>
+    with StoreWatcherMixin<HomePage> {
+  AudioCache audioCache = new AudioCache();
+  TicketStore ticketStore;
 
-  void _addPerson() {
-    setState(() {
-      _peopleCounter++;
-    });
+  @override
+  void initState() {
+    super.initState();
+
+    ticketStore = listenToStore(ticketStoreToken);
+  }
+
+  void _addPerson(String id) {
+    addTicket(new Ticket(
+      id: id,
+      date: DateTime.now()
+    ));
   }
 
   Future _scan() async {
-    String str = await new QRCodeReader()
-                   .setAutoFocusIntervalInMs(200) // default 5000
-                   .setForceAutoFocus(true) // default false
-                   .setTorchEnabled(true) // default false
-                   .setHandlePermissions(true) // default true
-                   .setExecuteAfterPermissionGranted(true) // default true
-                   .scan();
-    print(str);
-    this._addPerson();
+    String ticketId = await new QRCodeReader()
+                       .setAutoFocusIntervalInMs(100)
+                       .setForceAutoFocus(true)
+                       .setTorchEnabled(true)
+                       .scan();
+
+    bool duplicated = ticketStore.tickets.any((ticket) => ticketId == ticket.id);
+    if (duplicated) {
+      audioCache.play("alert.mp3");
+
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("What the actual fuck???"),
+            content: new Text(
+              "That ticket number is already at the party 😠 😤, better call Kadu."
+            ),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              new FlatButton(
+                child: new Text("Understandable, have a nice day."),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      Scaffold.of(context).showSnackBar(new SnackBar(
+        content: new Text("Added ticket: $ticketId"),
+      ));
+
+      this._addPerson(ticketId);
+    }
+
+
+
+  }
+
+  String buildPeopleCountText() {
+    if (ticketStore.tickets.length == 0)
+      return 'no one';
+
+    String ret = ticketStore.tickets.length.toString();
+    if (ticketStore.tickets.length == 1)
+      return ret + ' person';
+
+    return ret + ' people';
+  }
+
+  String buildDescriptionText() {
+    if (ticketStore.tickets.length == 0)
+      return 'is in the party =(';
+
+    String ret = ' in the party =)';
+    if (ticketStore.tickets.length == 1)
+      return 'is' + ret;
+
+    return 'are' + ret;
   }
 
   @override
@@ -45,12 +115,12 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: EdgeInsets.only(top: 6, bottom: 12),
                   child: Text(
-                      '${_peopleCounter == 0 ? 'no one' : '$_peopleCounter ${_peopleCounter == 1 ? 'person' : 'people'}'}',
+                      buildPeopleCountText(),
                       style: Theme.of(context).textTheme.display2
                   ),
                 ),
                 Text(
-                    '${_peopleCounter == 0 ? 'is in the party =(' : '${_peopleCounter == 1 ? 'is' : 'are'} in the party =)'}',
+                    buildDescriptionText(),
                     style: Theme.of(context).textTheme.headline
                 ),
               ],
