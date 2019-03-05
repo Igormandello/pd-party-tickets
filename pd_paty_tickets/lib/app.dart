@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/HomePage.dart';
+import 'screens/TicketList.dart';
 
 class App extends StatelessWidget {
   App({ Key key, this.title }) : super(key: key);
@@ -23,7 +24,7 @@ class App extends StatelessWidget {
         body: TabBarView(
           children: [
             HomePage(),
-            HomePage(),
+            TicketList(),
           ],
         ),
       ),
