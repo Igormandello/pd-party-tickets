@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({ Key key }) : super(key: key);
@@ -8,12 +9,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _counter = 0;
+  int _peopleCounter = 0;
 
-  void _incrementCounter() {
+  void _addPerson() {
     setState(() {
-      _counter++;
+      _peopleCounter++;
     });
+  }
+
+  Future _scan() async {
+    String str = await BarcodeScanner.scan();
+    print(str);
+    this._addPerson();
   }
 
   @override
@@ -22,22 +29,41 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+          children: <Widget> [
+            Column(
+              children: <Widget>[
+                Text(
+                    'So far',
+                    style: Theme.of(context).textTheme.headline
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 6, bottom: 12),
+                  child: Text(
+                      '${_peopleCounter == 0 ? 'no one' : '$_peopleCounter ${_peopleCounter == 1 ? 'person' : 'people'}'}',
+                      style: Theme.of(context).textTheme.display2
+                  ),
+                ),
+                Text(
+                    '${_peopleCounter == 0 ? 'is in the party =(' : '${_peopleCounter == 1 ? 'is' : 'are'} in the party =)'}',
+                    style: Theme.of(context).textTheme.headline
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 25),
             ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
+              'Click the button bellow to Scan a ticket.',
+            )
+          ]
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _scan,
+        label: Text('Scan QR Code'),
+        icon: Icon(Icons.camera)
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

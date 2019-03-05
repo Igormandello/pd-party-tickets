@@ -41,5 +41,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+    <string>Reading QR Codes without a camera isn't a good strategy right?</string>
 </dict>
 </plist>
