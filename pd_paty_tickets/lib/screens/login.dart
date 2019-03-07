@@ -1,16 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_flux/flutter_flux.dart';
+import 'package:pd_paty_tickets/screens/home.dart';
+import 'package:pd_paty_tickets/stores/authentication_store.dart';
 
 class Login extends StatefulWidget {
+  Login({ Key key }) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => new LoginState();
 }
 
 class LoginState extends State<Login>
   with StoreWatcherMixin<Login> {
+  AuthenticationStore authStore;
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+
+    authStore = listenToStore(authStoreToken, _onAuthChange);
+  }
+
+  void _requestLogin() {
+    login(
+      new AuthRequest(
+        username: this.usernameController.text,
+        password: this.passwordController.text
+      )
+    );
+  }
+
+  void _onAuthChange(store) {
+    store = store as AuthenticationStore;
+    if (store.token != null)
+      Navigator.pushReplacement(
+        context,
+        new MaterialPageRoute(
+          builder: (BuildContext context) => Home()
+        )
+      );
+  }
+
+  Widget _renderButtonChild() {
+    if (authStore.loading) {
+      return SizedBox(
+        height: 18,
+        width: 18,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+        )
+      );
+    }
+
+    return Text("Login");
   }
 
   @override
@@ -40,27 +84,34 @@ class LoginState extends State<Login>
             elevation: 6,
             margin: EdgeInsets.all(16),
             child: Padding(
-              padding: EdgeInsets.all(8),
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
               child: Column(
                 children: <Widget>[
                   TextField(
+                    controller: usernameController,
                     decoration: InputDecoration(
                       labelText: "Username"
                     ),
                   ),
                   TextField(
+                    controller: passwordController,
+                    obscureText: true,
                     decoration: InputDecoration(
                       labelText: "Password"
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 16),
-                    child: OutlineButton(
-                      child: Text("Login"),
-                      color: Theme.of(context).primaryColor,
-                      textColor: Theme.of(context).primaryColor,
-                      onPressed: () => null
-                    ),
+                    child: Container(
+                      width: 180,
+                      child: OutlineButton(
+                        borderSide: new BorderSide(color: Theme.of(context).primaryColor),
+                        child: _renderButtonChild(),
+                        color: Theme.of(context).primaryColor,
+                        textColor: Theme.of(context).primaryColor,
+                        onPressed: () => _requestLogin()
+                      ),
+                    )
                   )
                 ],
               ),
