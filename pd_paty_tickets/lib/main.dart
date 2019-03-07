@@ -7,11 +7,11 @@ class PDPartyTickets extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'PDP Tickets',
+      title: 'PD Party Tickets',
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      home: App(title: 'PD Party Tickets'),
+      home: App(),
     );
   }
 }

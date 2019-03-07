@@ -1,33 +1,13 @@
 import 'package:flutter/material.dart';
-import 'screens/home_page.dart';
-import 'screens/ticket_list.dart';
+import 'package:pd_paty_tickets/screens/home.dart';
 
 class App extends StatelessWidget {
-  App({ Key key, this.title }) : super(key: key);
-  
-  final String title;
+  App({ Key key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          bottom: TabBar(
-            tabs: [
-              Tab(icon: Icon(Icons.photo_camera)),
-              Tab(icon: Icon(Icons.format_list_bulleted)),
-            ],
-          ),
-          title: Text(this.title),
-        ),
-        body: TabBarView(
-          children: [
-            HomePage(),
-            TicketList(),
-          ],
-        ),
-      ),
+    return Scaffold(
+      body: Home(),
     );
   }
 }

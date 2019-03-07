@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_flux/flutter_flux.dart';
 import 'package:intl/intl.dart';
-import '../stores/ticket_store.dart';
+import '../../stores/ticket_store.dart';
 
 class TicketList extends StatefulWidget {
   TicketList({ Key key }) : super(key: key);

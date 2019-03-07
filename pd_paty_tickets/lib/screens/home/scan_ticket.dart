@@ -4,17 +4,17 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:qrcode_reader/qrcode_reader.dart';
 import 'package:flutter_flux/flutter_flux.dart';
-import '../stores/ticket_store.dart';
+import '../../stores/ticket_store.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({ Key key }) : super(key: key);
+class ScanTicket extends StatefulWidget {
+  ScanTicket({ Key key }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _HomePageState();
+  State<StatefulWidget> createState() => _ScanTicketState();
 }
 
-class _HomePageState extends State<HomePage>
-    with StoreWatcherMixin<HomePage> {
+class _ScanTicketState extends State<ScanTicket>
+    with StoreWatcherMixin<ScanTicket> {
   AudioCache audioCache = new AudioCache();
   TicketStore ticketStore;
 
@@ -38,6 +38,8 @@ class _HomePageState extends State<HomePage>
                        .setForceAutoFocus(true)
                        .setTorchEnabled(true)
                        .scan();
+
+    if (ticketId == null) return;
 
     bool duplicated = ticketStore.tickets.any((ticket) => ticketId == ticket.id);
     if (duplicated) {
