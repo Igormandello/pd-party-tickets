@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pd_paty_tickets/screens/home.dart';
 import 'package:pd_paty_tickets/screens/login.dart';
 
 class App extends StatelessWidget {

@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter_flux/flutter_flux.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart';
+import '../utils/http_middleware.dart';
 
 class AuthRequest {
   AuthRequest({ this.username, this.password});
@@ -13,21 +11,20 @@ class AuthRequest {
 class AuthenticationStore extends Store {
   AuthenticationStore() {
     triggerOnAction(login, (AuthRequest request) => _login(request.username, request.password));
-    triggerOnAction(setToken, (String token) => this._token = token);
     triggerOnAction(setLoading, (bool loading) => this._loading = loading);
+    triggerOnAction(setToken, (String token) {
+      this._token = token;
+      updateContractToken(token);
+    });
   }
 
   _login(String username, String password) async {
     setLoading(true);
-
-    String url = "${GlobalConfiguration().getString("API_HOST")}/v1/auth/login";
-    Response res = await post(url, headers: {
-        "Content-Type": "application/json"
-      },
-      body: json.encode({
-        "username": username,
-        "password": password
-      })
+    Response res = await http.post('/v1/auth/login',
+      body: {
+        'username': username,
+        'password': password
+      }
     );
 
     if (res.statusCode == 200) {
