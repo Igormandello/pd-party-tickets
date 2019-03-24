@@ -1,19 +1,53 @@
+import 'dart:convert';
+
 import 'package:flutter_flux/flutter_flux.dart';
+import 'package:http/http.dart';
+import '../utils/http_middleware.dart';
 
 class Ticket {
   Ticket({ this.id, this.date });
   final String id;
   final DateTime date;
+
+  factory Ticket.fromJson(Map<String, dynamic> json) {
+    return new Ticket(
+      id: json['id'],
+      date: DateTime.parse(json['date'])
+    );
+  }
 }
 
 class TicketStore extends Store {
   TicketStore() {
     triggerOnAction(addTicket, (Ticket ticket) {
-      if (!this._tickets.any((ticket) => ticket.id == ticket.id)) {
-        this._tickets.add(ticket);
-        this._tickets.sort((a, b) => a.id.compareTo(b.id));
-      }
+      this._addTicket(ticket);
     });
+
+    triggerOnAction(setTickets, (List<Ticket> tickets) {
+      this._tickets.clear();
+      this._tickets.addAll(tickets);
+    });
+
+    triggerOnAction(waitForTickets, (payload) {
+      this._fetchTickets(true);
+    });
+
+    this._fetchTickets(false);
+  }
+
+  _fetchTickets(bool wait) async {
+    Response res = await http.get('/v1/ticket${ wait ? '?wait' : ''}');
+    if (res.statusCode == 200) {
+      List rawTickets = json.decode(res.body) as List;
+      List<Ticket> tickets = rawTickets.map((item) => Ticket.fromJson(item)).toList();
+
+      setTickets(tickets);
+      waitForTickets();
+    }
+  }
+
+  _addTicket(Ticket ticket) async {
+    await http.post('/v1/ticket', body: { 'id': ticket.id });
   }
 
   final List<Ticket> _tickets = <Ticket>[];
@@ -23,4 +57,6 @@ class TicketStore extends Store {
 
 final StoreToken ticketStoreToken = new StoreToken(new TicketStore());
 
+final Action<List<Ticket>> setTickets = new Action<List<Ticket>>();
 final Action<Ticket> addTicket = new Action<Ticket>();
+final Action waitForTickets = new Action();
