@@ -20,10 +20,11 @@ class LoginState extends State<Login>
   void initState() {
     super.initState();
 
-    authStore = listenToStore(authStoreToken, _onAuthChange);
+    authStore = listenToStore(authStoreToken);
+    authStore.listen(this._onAuthChange);
   }
 
-  void _requestLogin() {
+  void _requestLogin() async {
     login(
       new AuthRequest(
         username: this.usernameController.text,
