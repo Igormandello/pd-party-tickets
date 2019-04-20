@@ -15,7 +15,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="pd_paty_tickets"
+        android:label="PD Party Tickets"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

@@ -23,6 +23,10 @@ class TicketStore extends Store {
       this._addTicket(ticket);
     });
 
+    triggerOnAction(removeTicket, (String ticketId) {
+      this._removeTicket(ticketId);
+    });
+
     triggerOnAction(setTickets, (List<Ticket> tickets) {
       this._tickets.clear();
       this._tickets.addAll(tickets);
@@ -50,6 +54,10 @@ class TicketStore extends Store {
     await http.post('/v1/ticket', body: { 'id': ticket.id });
   }
 
+  _removeTicket(String ticketId) async {
+    await http.delete('/v1/ticket/' + ticketId);
+  }
+
   final List<Ticket> _tickets = <Ticket>[];
   List<Ticket> get tickets =>
       new List<Ticket>.unmodifiable(_tickets);
@@ -59,4 +67,5 @@ final StoreToken ticketStoreToken = new StoreToken(new TicketStore());
 
 final Action<List<Ticket>> setTickets = new Action<List<Ticket>>();
 final Action<Ticket> addTicket = new Action<Ticket>();
+final Action<String> removeTicket = new Action<String>();
 final Action waitForTickets = new Action();

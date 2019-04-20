@@ -21,11 +21,44 @@ class TicketListState extends State<TicketList>
     ticketStore = listenToStore(ticketStoreToken);
   }
 
+  void _showOptions(int index) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+      // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Ticket ${ticketStore.tickets[index].id}"),
+          content: new Text(
+            "Hmm, I think that the only thing you could do is delete this ticket right?"
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("No, close."),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("Sure, delete this."),
+              onPressed: () {
+                removeTicket(ticketStore.tickets[index].id);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.separated(
         itemBuilder: (context, index) => ListTile(
+          onTap: () => _showOptions(index),
           leading: Icon(Icons.person),
           title: Text(
             ticketStore.tickets[index].id
