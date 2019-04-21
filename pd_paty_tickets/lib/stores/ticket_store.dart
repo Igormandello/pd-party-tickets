@@ -41,6 +41,10 @@ class TicketStore extends Store {
 
   _fetchTickets(bool wait) async {
     Response res = await http.get('/v1/ticket${ wait ? '?wait' : ''}');
+    while (res.statusCode == 503) {
+      res = await http.get('/v1/ticket?wait');
+    }
+
     if (res.statusCode == 200) {
       List rawTickets = json.decode(res.body) as List;
       List<Ticket> tickets = rawTickets.map((item) => Ticket.fromJson(item)).toList();
