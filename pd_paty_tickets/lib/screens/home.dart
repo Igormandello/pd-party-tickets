@@ -31,7 +31,7 @@ class Home extends StatelessWidget {
                   storage.delete(key: LOGIN_JWT_KEY);
                   setToken(null);
 
-                  Navigator.of(context).popUntil(ModalRoute.withName('/'));
+                  Navigator.pushReplacementNamed(context, "/");
                 }
               )
             )

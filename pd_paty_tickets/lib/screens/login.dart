@@ -38,7 +38,7 @@ class LoginState extends State<Login>
       this.usernameController.text = "";
       this.passwordController.text = "";
 
-      Navigator.pushNamed(context, "/home");
+      Navigator.pushReplacementNamed(context, "/home");
     }
   }
 
