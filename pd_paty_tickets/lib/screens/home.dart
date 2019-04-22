@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'home/scan_ticket.dart';
 import 'home/ticket_list.dart';
+import '../stores/authentication_store.dart';
+import './login.dart';
 
 class Home extends StatelessWidget {
   Home({ Key key }) : super(key: key);
@@ -18,6 +21,26 @@ class Home extends StatelessWidget {
             ],
           ),
           title: Text("PD Party Tickets"),
+          actions: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.0),
+              child: IconButton(
+                icon: Icon(Icons.exit_to_app),
+                onPressed: () {
+                  final storage = new FlutterSecureStorage();
+                  storage.delete(key: LOGIN_JWT_KEY);
+                  setToken(null);
+
+                  Navigator.pushReplacement(
+                    context,
+                    new MaterialPageRoute(
+                      builder: (BuildContext context) => Login()
+                    )
+                  );
+                }
+              )
+            )
+          ],
         ),
         body: TabBarView(
           children: [

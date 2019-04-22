@@ -35,13 +35,14 @@ class LoginState extends State<Login>
 
   void _onAuthChange(store) {
     store = store as AuthenticationStore;
-    if (store.token != null)
+    if (store.token != null) {
       Navigator.pushReplacement(
         context,
         new MaterialPageRoute(
           builder: (BuildContext context) => Home()
         )
       );
+    }
   }
 
   Widget _renderButtonChild() {

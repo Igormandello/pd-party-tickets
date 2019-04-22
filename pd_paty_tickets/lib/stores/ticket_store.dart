@@ -19,8 +19,8 @@ class Ticket {
 
 class TicketStore extends Store {
   TicketStore() {
-    triggerOnAction(addTicket, (Ticket ticket) {
-      this._addTicket(ticket);
+    triggerOnAction(addTicket, (String ticketId) {
+      this._addTicket(ticketId);
     });
 
     triggerOnAction(removeTicket, (String ticketId) {
@@ -35,7 +35,9 @@ class TicketStore extends Store {
     triggerOnAction(waitForTickets, (payload) {
       this._fetchTickets(true);
     });
+  }
 
+  fetchTickets() {
     this._fetchTickets(false);
   }
 
@@ -54,8 +56,8 @@ class TicketStore extends Store {
     }
   }
 
-  _addTicket(Ticket ticket) async {
-    await http.post('/v1/ticket', body: { 'id': ticket.id });
+  _addTicket(String ticketId) async {
+    await http.post('/v1/ticket', body: { 'id': ticketId });
   }
 
   _removeTicket(String ticketId) async {
@@ -70,6 +72,6 @@ class TicketStore extends Store {
 final StoreToken ticketStoreToken = new StoreToken(new TicketStore());
 
 final Action<List<Ticket>> setTickets = new Action<List<Ticket>>();
-final Action<Ticket> addTicket = new Action<Ticket>();
+final Action<String> addTicket = new Action<String>();
 final Action<String> removeTicket = new Action<String>();
 final Action waitForTickets = new Action();

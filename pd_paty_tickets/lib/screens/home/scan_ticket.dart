@@ -23,13 +23,11 @@ class _ScanTicketState extends State<ScanTicket>
     super.initState();
 
     ticketStore = listenToStore(ticketStoreToken);
+    ticketStore.fetchTickets();
   }
 
   void _addPerson(String id) {
-    addTicket(new Ticket(
-      id: id,
-      date: DateTime.now()
-    ));
+    addTicket(id);
   }
 
   Future _scan() async {
@@ -74,9 +72,6 @@ class _ScanTicketState extends State<ScanTicket>
 
       this._addPerson(ticketId);
     }
-
-
-
   }
 
   String buildPeopleCountText() {
@@ -132,6 +127,7 @@ class _ScanTicketState extends State<ScanTicket>
             ),
             Text(
               'Click the button bellow to Scan a ticket.',
+              textAlign: TextAlign.center,
             )
           ]
         ),
