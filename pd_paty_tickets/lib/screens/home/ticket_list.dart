@@ -53,26 +53,66 @@ class TicketListState extends State<TicketList>
     );
   }
 
+  void _addAnonymousTicket() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Anonymous ticket"),
+          content: new Text(
+            "Is someone paying 50 bucks? LOL, MONEY BITCH."
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("No, wtf."),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("OH YEAH BABY."),
+              onPressed: () {
+                addAnonymousTicket();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.separated(
-        itemBuilder: (context, index) => ListTile(
-          onTap: () => _showOptions(index),
-          leading: Icon(Icons.person),
-          title: Text(
-            ticketStore.tickets[index].id
+      body: new RefreshIndicator(
+        onRefresh: () async { await ticketStore.fetchTickets(); },
+        child: ListView.separated(
+          itemBuilder: (context, index) => ListTile(
+            onTap: () => _showOptions(index),
+            leading: Icon(Icons.person),
+            title: Text(
+              ticketStore.tickets[index].id
+            ),
+            trailing: Text(
+              new DateFormat.Hm().format(ticketStore.tickets[index].date),
+              style: Theme.of(context).textTheme.caption,
+            )
           ),
-          trailing: Text(
-            new DateFormat.Hm().format(ticketStore.tickets[index].date),
-            style: Theme.of(context).textTheme.caption,
-          )
+          separatorBuilder: (context, index) => Divider(
+            color: Colors.black26,
+          ),
+          itemCount: ticketStore.tickets.length,
         ),
-        separatorBuilder: (context, index) => Divider(
-          color: Colors.black26,
-        ),
-        itemCount: ticketStore.tickets.length,
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addAnonymousTicket,
+        child: Icon(Icons.person_add),
+        elevation: 8.0,
+      ),
     );
   }
 }

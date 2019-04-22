@@ -130,7 +130,7 @@ class _ScanTicketState extends State<ScanTicket>
               textAlign: TextAlign.center,
             )
           ]
-        ),
+        )
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _scan,

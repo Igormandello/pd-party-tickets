@@ -23,6 +23,10 @@ class TicketStore extends Store {
       this._addTicket(ticketId);
     });
 
+    triggerOnAction(addAnonymousTicket, (payload) {
+      this._addAnonymousTicket();
+    });
+
     triggerOnAction(removeTicket, (String ticketId) {
       this._removeTicket(ticketId);
     });
@@ -37,8 +41,8 @@ class TicketStore extends Store {
     });
   }
 
-  fetchTickets() {
-    this._fetchTickets(false);
+  fetchTickets() async {
+    await this._fetchTickets(false);
   }
 
   _fetchTickets(bool wait) async {
@@ -60,6 +64,10 @@ class TicketStore extends Store {
     await http.post('/v1/ticket', body: { 'id': ticketId });
   }
 
+  _addAnonymousTicket() async {
+    await http.post('/v1/ticket/anonymous');
+  }
+
   _removeTicket(String ticketId) async {
     await http.delete('/v1/ticket/' + ticketId);
   }
@@ -74,4 +82,5 @@ final StoreToken ticketStoreToken = new StoreToken(new TicketStore());
 final Action<List<Ticket>> setTickets = new Action<List<Ticket>>();
 final Action<String> addTicket = new Action<String>();
 final Action<String> removeTicket = new Action<String>();
+final Action addAnonymousTicket = new Action();
 final Action waitForTickets = new Action();
