@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pd_paty_tickets/screens/login.dart';
+import 'package:pd_paty_tickets/screens/home.dart';
 
 class App extends StatelessWidget {
   App({ Key key }) : super(key: key);
@@ -11,7 +12,11 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      home: Login(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => Login(),
+        '/home': (context) => Home(),
+      }
     );
 }
 }

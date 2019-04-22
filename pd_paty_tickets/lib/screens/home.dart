@@ -31,12 +31,7 @@ class Home extends StatelessWidget {
                   storage.delete(key: LOGIN_JWT_KEY);
                   setToken(null);
 
-                  Navigator.pushReplacement(
-                    context,
-                    new MaterialPageRoute(
-                      builder: (BuildContext context) => Login()
-                    )
-                  );
+                  Navigator.of(context).popUntil(ModalRoute.withName('/'));
                 }
               )
             )

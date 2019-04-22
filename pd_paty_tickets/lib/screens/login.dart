@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_flux/flutter_flux.dart';
-import 'package:pd_paty_tickets/screens/home.dart';
 import 'package:pd_paty_tickets/stores/authentication_store.dart';
 
 class Login extends StatefulWidget {
@@ -36,12 +35,10 @@ class LoginState extends State<Login>
   void _onAuthChange(store) {
     store = store as AuthenticationStore;
     if (store.token != null) {
-      Navigator.pushReplacement(
-        context,
-        new MaterialPageRoute(
-          builder: (BuildContext context) => Home()
-        )
-      );
+      this.usernameController.text = "";
+      this.passwordController.text = "";
+
+      Navigator.pushNamed(context, "/home");
     }
   }
 
