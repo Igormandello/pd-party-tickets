@@ -27,7 +27,10 @@ class AuthenticationContract extends MiddlewareContract {
 }
 
 updateContractToken (String token) {
-  http = HttpWithMiddleware.build(middlewares: [ AuthenticationContract(token: token) ]);
+  if (token != null)
+    http = HttpWithMiddleware.build(middlewares: [ AuthenticationContract(token: token) ]);
+  else
+    http = HttpWithMiddleware.build(middlewares: [ AuthenticationContract() ]);
 }
 
 HttpWithMiddleware http = HttpWithMiddleware.build(middlewares: [ AuthenticationContract() ]);

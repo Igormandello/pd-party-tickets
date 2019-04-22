@@ -16,6 +16,7 @@ dependencies:
   global_configuration: any
   http: any
   http_middleware: any
+  flutter_secure_storage: any
   cupertino_icons: ^0.1.2
 
 dev_dependencies:

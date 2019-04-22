@@ -33,7 +33,7 @@ android {
 
     defaultConfig {
         applicationId "com.pdparty.pdpatytickets"
-        minSdkVersion 16
+        minSdkVersion 18
         targetSdkVersion 27
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
